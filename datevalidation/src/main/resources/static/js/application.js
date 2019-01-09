@@ -21,29 +21,54 @@ function setInitialDate(){
     }else{
         requestDate = formatDate(requestDate);
     }
-    $('#startDatePicker').datepicker('setDate', requestDate);
-    $('#endDatePicker').datepicker('setDate', requestDate);
+    // Decided not to use default date
+	//$('#startDatePicker').datepicker('setDate', requestDate);
+	//$('#endDatePicker').datepicker('setDate', requestDate);
 
 };
 
 function validatePageForDateSelection(){
-	console.log('Testing');
-    var startDate = new Date(document.getElementById('startDatePicker').value);
-    var endDate = new Date(document.getElementById('endDatePicker').value);
-    var diffDays = endDate.getDate() - startDate.getDate();
-    var errorElement = document.getElementById('errorMessage');
-    var successElement = document.getElementById('successMessage');
-    if (diffDays < 0){
-        errorElement.classList.remove("hidden");
-        successElement.classList.add("hidden");
-    }else{
-        successElement.classList.remove("hidden");
-        errorElement.classList.add("hidden");
-        document.getElementById('successMsg').innerHTML = "The differance between start date and end date is " + diffDays;
-    }
+	var startDate = new Date(document.getElementById('startDatePicker').value);
+	var endDate = new Date(document.getElementById('endDatePicker').value);
+	var errorElement = document.getElementById('errorMessage');
+	var successElement = document.getElementById('successMessage');
+	    
+	if (validateStartDate(startDate) && validateEndDate(endDate) ){
+	    var diffDays = endDate.getDate() - startDate.getDate();
+	    if (diffDays < 0){
+	        errorElement.classList.remove("hidden");
+	        successElement.classList.add("hidden");
+	    }else{
+	        successElement.classList.remove("hidden");
+	        errorElement.classList.add("hidden");
+	        document.getElementById('successMsg').innerHTML = "The differance between start date and end date is " + diffDays;
+	    }
+	}else{
+		successElement.classList.add("hidden");
+		errorElement.classList.add("hidden");
+	}
     return false;
 };
 
+function validateStartDate(startDate){
+    if (isNaN(startDate.getTime())){
+    	document.getElementById('startDate').classList.add("has-error");
+    	return false;
+    }else{
+       	document.getElementById('startDate').classList.remove("has-error");
+       	return true;
+    }
+}
+
+function validateEndDate(endDate){
+    if (isNaN(endDate.getTime())){
+    	document.getElementById('endDate').classList.add("has-error");
+    	return false;
+    }else{
+       	document.getElementById('endDate').classList.remove("has-error");
+    	return true;  	
+    }
+}
 
 function formatDate(input) {
     var dateFormat = 'yyyy-mm-dd';
@@ -58,5 +83,3 @@ $(document).ready(function(){
     setDatePicker();
     setInitialDate();
 });
-
-
